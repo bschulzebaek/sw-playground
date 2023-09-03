@@ -1,0 +1,34 @@
+{
+    "name": "baek/sw-playground",
+    "description": "SW Playground",
+    "type": "shopware-platform-plugin",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "SwPlayground\\": "src/"
+        }
+    },
+    "require": {
+        "shopware/core": "~v6.6",
+        "symfony/expression-language": "^v7.1.6.0"
+    },
+    "extra": {
+        "shopware-plugin-class": "SwPlayground\\SwPlayground",
+        "label": {
+            "de-DE": "SwPlayground",
+            "en-GB": "SwPlayground"
+        },
+        "description": {
+            "de-DE": "Collection of dev/convenience tools for Shopware 6",
+            "en-GB": "Collection of dev/convenience tools for Shopware 6"
+        },
+        "manufacturerLink": {
+            "de-DE": "https://github.com/bschulzebaek/sw-playground",
+            "en-GB": "https://github.com/bschulzebaek/sw-playground"
+        },
+        "supportLink": {
+            "de-DE": "https://github.com/bschulzebaek/sw-playground",
+            "en-GB": "https://github.com/bschulzebaek/sw-playground"
+        }
+    }
+}
