@@ -10,7 +10,8 @@
     },
     "require": {
         "shopware/core": "~v6.6",
-        "symfony/expression-language": "^v7.1.6.0"
+        "symfony/expression-language": "^v7.1.6.0",
+        "openai-php/client": "^0.10.3"
     },
     "extra": {
         "shopware-plugin-class": "SwPlayground\\SwPlayground",
@@ -29,6 +30,12 @@
         "supportLink": {
             "de-DE": "https://github.com/bschulzebaek/sw-playground",
             "en-GB": "https://github.com/bschulzebaek/sw-playground"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "symfony/runtime": true,
+            "php-http/discovery": true
         }
     }
 }

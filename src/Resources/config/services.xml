@@ -21,5 +21,11 @@
             <argument type="service" id="Shopware\Core\Maintenance\System\Service\ShopConfigurator"/>
             <tag name="console.command"/>
         </service>
+
+        <service id="SwPlayground\AiLayout\AiLayoutController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
     </services>
 </container>

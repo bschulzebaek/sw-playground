@@ -1,0 +1,34 @@
+<sw-sidebar-item icon="solid-sparkles"
+                 title="Edit with AI">
+    <div style="padding: 0.75rem;">
+        <mt-textarea v-model="prompt"
+                     :placeholder="randomPlaceholder"
+                     :disabled="loading"
+        ></mt-textarea>
+
+        <div style="text-align: right;">
+            <mt-button variant="primary"
+                       :disabled="!prompt || loading"
+                       :is-loading="loading"
+                       @click="onSubmit">
+                Generate
+            </mt-button>
+        </div>
+
+        <div style="margin-top: 1rem;">
+            <h4>Previous prompts</h4>
+
+            <ul style="margin: 0; padding: 0; list-style: none;">
+                <li>
+                    <p>Lorem ipsum dolor sid amet</p>
+                </li>
+                <li>
+                    <p>Lorem ipsum dolor sid amet</p>
+                </li>
+                <li>
+                    <p>Lorem ipsum dolor sid amet</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</sw-sidebar-item>
