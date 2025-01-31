@@ -2,19 +2,8 @@
 
 namespace SwPlayground\AiLayout;
 
-use Shopware\Administration\Controller\Exception\AppByNameNotFoundException;
-use Shopware\Administration\Controller\Exception\MissingAppSecretException;
-use Shopware\Core\Framework\App\ActionButton\AppAction;
-use Shopware\Core\Framework\App\ActionButton\Executor;
-use Shopware\Core\Framework\App\AppEntity;
-use Shopware\Core\Framework\App\Hmac\QuerySigner;
-use Shopware\Core\Framework\App\Manifest\Exception\UnallowedHostException;
-use Shopware\Core\Framework\App\Payload\AppPayloadServiceHelper;
+use OpenAI;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(defaults: ['_routeScope' => ['api']])]
 class AiLayoutController extends AbstractController
 {
-    private static string $wrapperPrompt = '"%inner_prompt%" "%data%"';
+    private static string $wrapperPrompt = 'Use the following prompt "%inner_prompt%" and data "%data%". The dataset represents a layout for CMS pages. Edit and improve it according to the prompt. Please only return the final JSON data.';
 
     public function __construct() {
     }
@@ -33,27 +22,28 @@ class AiLayoutController extends AbstractController
     public function runAction(RequestDataBag $requestDataBag, Context $context): Response
     {
         $data = $requestDataBag->all();
-        $client = \OpenAI::client(getenv('OPENAI_API_KEY'));
+        $client = OpenAI::client(getenv('OPENAI_API_KEY'));
 
+        // provide some documentation
         $prompt = $this->buildPrompt($data['prompt'], $data['pageData']);
 
         $result = $client->chat()->create([
-            'model' => 'gpt-4',
+            'model' => 'gpt-4o-mini',
             'messages' => [
                 ['role' => 'user', 'content' => $prompt],
             ],
         ]);
 
-        dd($result->choices[0]->message->content);
+        // parse result
+        $newPage = $result->choices[0]->message->content;
 
-        return new JsonResponse([
-            'prompt' => $data['prompt'],
-            'pageData' => $data['pageData'],
-        ]);
+        dd($newPage);
+
+        return new JsonResponse($newPage);
     }
 
     private function buildPrompt(string $input, array $data): string
     {
-        return str_replace('%data%', json_encode($data), str_replace('%inner_prompt%', $input, self::wrapperPrompt));
+        return str_replace('%data%', json_encode($data), str_replace('%inner_prompt%', $input, AiLayoutController::$wrapperPrompt));
     }
 }
